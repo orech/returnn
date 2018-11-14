@@ -2362,6 +2362,8 @@ class NativeCodeCompiler(object):
   def _need_recompile(self):
     if not os.path.exists(self._so_filename):
       return True
+    if os.stat(self._so_filename).st_size == 0:
+      return True  # sometimes fs errors may cause the size to be zero
     if self.include_deps:
       so_mtime = os.path.getmtime(self._so_filename)
       for fn in self.include_deps:
